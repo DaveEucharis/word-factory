@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+body {
+  @apply bg-amber-200;
+}
+
+@utility center {
+  @apply flex items-center justify-center;
+}
+
+@utility transition-outline {
+  transition: outline 150ms;
+}
+
+@utility transition-height {
+  transition: max-height 500ms;
+}
