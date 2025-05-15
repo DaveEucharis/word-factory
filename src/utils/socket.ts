@@ -11,7 +11,7 @@ export const socket = io(link, {
 })
 
 export function listenToSocket(evName: string, cb: (...args: any) => void) {
-  useEffect(() => {
+  return useEffect(() => {
     socket.on(evName, cb)
 
     return () => {

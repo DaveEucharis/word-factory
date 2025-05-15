@@ -1,4 +1,4 @@
-import { useState, type SyntheticEvent } from 'react'
+import { useState, type SyntheticEvent, useEffect } from 'react'
 import { listenToSocket, socket } from '../utils/socket'
 
 type TallyScore = {
@@ -8,21 +8,30 @@ type TallyScore = {
   id: string
 }[]
 
-const ScoreTally = () => {
+type ScoreTallyProps = {
+  foundWords: string[]
+}
+
+const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
   const [tallyResult, setTallyResult] = useState<TallyScore>([])
 
   //Listeners
   const showResultWords = (ev: SyntheticEvent) => {
     const ele = ev.currentTarget as HTMLLIElement
-    const hiddenEle = ele.parentElement?.lastChild as HTMLUListElement
+    const hiddenEle = ele.parentElement?.lastChild as HTMLDivElement
+    const ul = hiddenEle.firstChild as HTMLUListElement
+    const height = ul.offsetHeight
 
-    if (hiddenEle.classList.contains('max-h-0')) {
-      hiddenEle.classList.remove('max-h-0')
-      hiddenEle.classList.add('max-h-[10rem]')
-    } else {
-      hiddenEle.classList.remove('max-h-[10rem]')
-      hiddenEle.classList.add('max-h-0')
-    }
+    if (hiddenEle.offsetHeight === 0) hiddenEle.style.height = height + 'px'
+    else hiddenEle.style.height = '0'
+
+    //   if (hiddenEle.classList.contains('max-h-0')) {
+    //     hiddenEle.classList.remove('max-h-0')
+    //     hiddenEle.classList.add('max-h-[10rem]')
+    //   } else {
+    //     hiddenEle.classList.remove('max-h-[10rem]')
+    //     hiddenEle.classList.add('max-h-0')
+    //   }
   }
 
   const scorePlacesStyle = (index: number) => {
@@ -37,14 +46,23 @@ const ScoreTally = () => {
     socket.emit('return')
   }
 
+  useEffect(() => {
+    socket.emit('found-words', foundWords)
+  }, [])
+
   //Listen to Result
   listenToSocket('tally-result', (data: TallyScore) => {
     setTallyResult(data)
   })
 
   return (
-    <section className='h-full w-70 bg-amber-300'>
-      <ul className='flex flex-col w-full gap-4 pt-8'>
+    <section className='h-full w-90 center'>
+      <ul className='flex flex-col w-full gap-4 bg-amber-300 rounded-xl px-4 pb-8'>
+        <header className='flex justify-between items-center w-[90%] p-4 mx-auto rounded-md bg-amber-400'>
+          <span className='text-2xl font-bold'>Player</span>
+          <span className='text-2xl font-bold'>Score</span>
+        </header>
+
         {tallyResult.map((v, i) => (
           <li key={i}>
             <div
@@ -56,16 +74,16 @@ const ScoreTally = () => {
               }
             >
               <span className='text-xl font-semibold'>{v.name}</span>
-              <span className='text-2xl font-semibold'>{v.score}</span>
+              <span className='text-2xl font-bold'>{v.score}</span>
             </div>
 
-            <div className='w-[90%] max-h-0 mt-2 mx-auto overflow-hidden rounded-md bg-amber-500 transition-height'>
-              <ul className='p-4 flex flex-wrap gap-4'>
+            <div className='w-[90%] h-0 mt-2 mx-auto overflow-hidden rounded-md bg-amber-400 transition-height'>
+              <ul className='flex flex-wrap p-4 gap-4'>
                 {v.result.map((v2, i2) => (
                   <li
                     key={i2}
                     className={
-                      'lowercase font-semibold ' +
+                      'lowercase font-semibold text-center ' +
                       (!v2.valid ? 'opacity-90 line-through' : '')
                     }
                   >
@@ -76,14 +94,14 @@ const ScoreTally = () => {
             </div>
           </li>
         ))}
-      </ul>
 
-      <button
-        onClick={handleReturn}
-        className='bg-amber-500 text-2xl py-2 px-10 rounded-2xl font-bold mx-auto block mt-8'
-      >
-        Return
-      </button>
+        <button
+          onClick={handleReturn}
+          className='bg-amber-500 text-2xl py-2 px-10 rounded-2xl font-bold mx-auto block mt-8'
+        >
+          Return
+        </button>
+      </ul>
     </section>
   )
 }

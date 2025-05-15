@@ -5,22 +5,23 @@ import {
   useEffect,
   useRef,
 } from 'react'
-import { listenToSocket, socket } from '../utils/socket'
 import ScoreTally from './ScoreTally'
 import { isProd } from '../utils/isProd'
 
-type WordFactoryArray = {
-  letter: string
-  rotation: string
-}[][]
+type StartGameProps = {
+  wordFactoryArray: {
+    letter: string
+    rotation: string
+  }[][]
+}
 
-const StartGame = () => {
+const StartGame = ({ wordFactoryArray }: StartGameProps) => {
   const [selectedBlocks, setSelectedBlocks] = useState<HTMLLIElement[]>([])
   const [word, setWord] = useState('')
   const [foundWords, setFoundWords] = useState<string[]>([])
   const [timer, setTimer] = useState(3)
 
-  const [wordFactoryArray, setWordFactoryArray] = useState<WordFactoryArray>([])
+  // const [wordFactoryArray, setWordFactoryArray] = useState<WordFactoryArray>([])
 
   const curtainRef = useRef<HTMLDivElement>(null)
 
@@ -101,9 +102,9 @@ const StartGame = () => {
   }, [selectedBlocks])
 
   //GET WORD FACTORY ARRAY
-  listenToSocket('word-factory-array', (data: WordFactoryArray) => {
-    setWordFactoryArray(data)
-  })
+  // listenToSocket('word-factory-array', (data: WordFactoryArray) => {
+  //   setWordFactoryArray(data)
+  // })
 
   //COUNTDOWN TO START
   const initialCountdown = useRef(true)
@@ -125,7 +126,7 @@ const StartGame = () => {
               initialCountdown.current = false
             }, 1000)
 
-            return 120 //120 2mins
+            return 5 //120 2mins
           } else {
             clearInterval(intervalID)
 
@@ -144,15 +145,15 @@ const StartGame = () => {
   }, [])
 
   //Reset & Emit found words when timer ends
-  useEffect(() => {
-    if (timer === -1) {
-      socket.emit('found-words', foundWords)
+  // useEffect(() => {
+  //   if (timer === -1) {
+  //     socket.emit('found-words', foundWords)
 
-      setSelectedBlocks([])
-      setFoundWords([])
-      setWord('')
-    }
-  }, [timer])
+  //     setSelectedBlocks([])
+  //     setFoundWords([])
+  //     setWord('')
+  //   }
+  // }, [timer])
 
   const classes = {
     li: 'text-2xl font-bold rounded-md text-center center bg-amber-300 underline transition-outline outline-0',
@@ -162,21 +163,32 @@ const StartGame = () => {
 
   return (
     <>
-      <section className='realtive select-none'>
+      <section className='realtive select-none pt-4'>
         <div
           ref={curtainRef}
-          className='absolute h-full bg-amber-200 rounded-lg left-0 right-0 top-0 z-10 center transition-transform'
+          className='absolute h-full bg-amber-200 rounded-lg left-0 right-0 top-0 z-10 center transition-translate'
         >
           {timer > -1 ? (
             <span className='text-8xl font-bold'>{timer}</span>
           ) : (
-            <ScoreTally />
+            <ScoreTally foundWords={foundWords} />
           )}
         </div>
-        <ul className='size-80 mx-auto mt-2 grid grid-cols-5 justify-center gap-2'>
+        <ul className='size-80 mx-auto grid grid-cols-5 justify-center gap-2'>
           {wordFactoryArray.map((v, i) => (
             <Fragment key={i}>
-              <li
+              {v.map((v2, i2) => (
+                <li
+                  key={i2}
+                  data-index={String(i) + i2}
+                  onClick={handle.diceClick}
+                  className={classes.li}
+                >
+                  <span className={`rotate-${v2.rotation}`}>{v2.letter}</span>
+                </li>
+              ))}
+
+              {/* <li
                 data-index={i + '0'}
                 onClick={handle.diceClick}
                 className={classes.li}
@@ -210,7 +222,7 @@ const StartGame = () => {
                 className={classes.li}
               >
                 <span className={`rotate-${v[4].rotation}`}>{v[4].letter}</span>
-              </li>
+              </li> */}
             </Fragment>
           ))}
         </ul>

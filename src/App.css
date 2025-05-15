@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
-body {
-  @apply bg-amber-200;
+#root {
+  @apply bg-amber-200 min-h-dvh;
 }
 
 @utility center {
@@ -13,5 +13,13 @@ body {
 }
 
 @utility transition-height {
-  transition: max-height 500ms;
+  transition: height 500ms;
+}
+
+@utility transition-translate {
+  transition: translate 500ms;
+}
+
+@utility transition-bg {
+  transition: background-color 500ms;
 }

@@ -1,36 +1,39 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 
 import Home from './component/Home'
 import StartGame from './component/StartGame'
-import { socket } from './utils/socket'
+import { listenToSocket } from './utils/socket'
+import { fullScreenAPI } from './utils/fullScreen'
+
+type WordFactoryArray = {
+  letter: string
+  rotation: string
+}[][]
 
 const App = () => {
   const [playing, setPlaying] = useState(false)
+  const [wordFactoryArray, setWordFactoryArray] = useState<WordFactoryArray>([])
 
-  useEffect(() => {
-    const cb = () => {
-      setPlaying(true)
-    }
-    socket.on('start-game', cb)
+  listenToSocket('word-factory-array', (data: WordFactoryArray) => {
+    setWordFactoryArray(data)
+  })
 
-    return () => {
-      socket.off('start-game', cb)
-    }
-  }, [socket])
+  listenToSocket('start-game', () => {
+    setPlaying(true)
+  })
 
-  useEffect(() => {
-    const cb = () => {
-      setPlaying(false)
-    }
-    socket.on('end-game', cb)
+  listenToSocket('end-game', () => {
+    setPlaying(false)
+  })
 
-    return () => {
-      socket.off('end-game', cb)
-    }
-  }, [socket])
+  fullScreenAPI()
 
-  return <>{playing ? <StartGame /> : <Home />}</>
+  return (
+    <>
+      {playing ? <StartGame wordFactoryArray={wordFactoryArray} /> : <Home />}
+    </>
+  )
 }
 
 export default App

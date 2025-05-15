@@ -56,7 +56,12 @@ const PrepareStart = () => {
   return (
     <>
       <div className='center flex-col gap-4'>
-        <div className='h-[25rem] w-[18rem] bg-amber-300 rounded-lg p-4'>
+        <div
+          className={
+            'h-[25rem] w-[18rem] bg-amber-300 rounded-lg p-4 transition-outline ' +
+            (ready ? 'outline-4 outline-green-500' : '')
+          }
+        >
           <input
             type='text'
             placeholder='Player Name'
@@ -73,17 +78,24 @@ const PrepareStart = () => {
               v.id !== socket.id ? (
                 <li
                   key={i}
-                  className='grid grid-cols-2 grid-flow-row border-b-1 border-b-amber-300 p-1'
+                  className={
+                    'grid grid-cols-2 grid-flow-row rounded-xl shadow-xs shadow-black py-2 px-4 transition-bg ' +
+                    (v.playing
+                      ? 'bg-amber-200'
+                      : v.ready
+                      ? 'bg-green-400'
+                      : 'bg-red-500')
+                  }
                 >
                   <p className='text-xl font-semibold '>{v.name}</p>
                   <p
                     className={
                       'text-xl font-semibold text-right  ' +
                       (v.playing
-                        ? 'text-amber-200'
+                        ? 'text-amber-400'
                         : v.ready
                         ? 'text-green-600'
-                        : 'text-red-500')
+                        : 'text-red-600')
                     }
                   >
                     {v.playing ? 'Playing' : v.ready ? 'Ready' : 'Unready'}
