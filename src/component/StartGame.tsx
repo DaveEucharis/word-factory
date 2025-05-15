@@ -126,7 +126,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
               initialCountdown.current = false
             }, 1000)
 
-            return 5 //120 2mins
+            return 120 //120 2mins
           } else {
             clearInterval(intervalID)
 
