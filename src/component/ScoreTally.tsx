@@ -24,14 +24,6 @@ const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
 
     if (hiddenEle.offsetHeight === 0) hiddenEle.style.height = height + 'px'
     else hiddenEle.style.height = '0'
-
-    //   if (hiddenEle.classList.contains('max-h-0')) {
-    //     hiddenEle.classList.remove('max-h-0')
-    //     hiddenEle.classList.add('max-h-[10rem]')
-    //   } else {
-    //     hiddenEle.classList.remove('max-h-[10rem]')
-    //     hiddenEle.classList.add('max-h-0')
-    //   }
   }
 
   const scorePlacesStyle = (index: number) => {
@@ -56,7 +48,7 @@ const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
   })
 
   return (
-    <section className='h-full w-90 center'>
+    <section className='h-full w-90 center overflow-y-scroll []'>
       <ul className='flex flex-col w-full gap-4 bg-amber-300 rounded-xl px-4 pb-8'>
         <header className='flex justify-between items-center w-[90%] p-4 mx-auto rounded-md bg-amber-400'>
           <span className='text-2xl font-bold'>Player</span>

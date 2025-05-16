@@ -79,7 +79,7 @@ const PrepareStart = () => {
                 <li
                   key={i}
                   className={
-                    'grid grid-cols-2 grid-flow-row rounded-xl shadow-xs shadow-black py-2 px-4 transition-bg ' +
+                    'grid grid-cols-2 grid-flow-row rounded-xl shadow-xs shadow-black py-2 px-4 mt-4 transition-bg ' +
                     (v.playing
                       ? 'bg-amber-200'
                       : v.ready

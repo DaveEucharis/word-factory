@@ -23,3 +23,7 @@
 @utility transition-bg {
   transition: background-color 500ms;
 }
+
+::-webkit-scrollbar {
+  display: none;
+}

@@ -101,11 +101,6 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
     })
   }, [selectedBlocks])
 
-  //GET WORD FACTORY ARRAY
-  // listenToSocket('word-factory-array', (data: WordFactoryArray) => {
-  //   setWordFactoryArray(data)
-  // })
-
   //COUNTDOWN TO START
   const initialCountdown = useRef(true)
   const hasRun = useRef(false)
@@ -126,7 +121,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
               initialCountdown.current = false
             }, 1000)
 
-            return 120 //120 2mins
+            return isProd ? 120 : 5 // 2mins
           } else {
             clearInterval(intervalID)
 
@@ -143,17 +138,6 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
       })
     }, 1000)
   }, [])
-
-  //Reset & Emit found words when timer ends
-  // useEffect(() => {
-  //   if (timer === -1) {
-  //     socket.emit('found-words', foundWords)
-
-  //     setSelectedBlocks([])
-  //     setFoundWords([])
-  //     setWord('')
-  //   }
-  // }, [timer])
 
   const classes = {
     li: 'text-2xl font-bold rounded-md text-center center bg-amber-300 underline transition-outline outline-0',
@@ -187,42 +171,6 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
                   <span className={`rotate-${v2.rotation}`}>{v2.letter}</span>
                 </li>
               ))}
-
-              {/* <li
-                data-index={i + '0'}
-                onClick={handle.diceClick}
-                className={classes.li}
-              >
-                <span className={`rotate-${v[0].rotation}`}>{v[0].letter}</span>
-              </li>
-              <li
-                data-index={i + '1'}
-                onClick={handle.diceClick}
-                className={classes.li}
-              >
-                <span className={`rotate-${v[1].rotation}`}>{v[1].letter}</span>
-              </li>
-              <li
-                data-index={i + '2'}
-                onClick={handle.diceClick}
-                className={classes.li}
-              >
-                <span className={`rotate-${v[2].rotation}`}>{v[2].letter}</span>
-              </li>
-              <li
-                data-index={i + '3'}
-                onClick={handle.diceClick}
-                className={classes.li}
-              >
-                <span className={`rotate-${v[3].rotation}`}>{v[3].letter}</span>
-              </li>
-              <li
-                data-index={i + '4'}
-                onClick={handle.diceClick}
-                className={classes.li}
-              >
-                <span className={`rotate-${v[4].rotation}`}>{v[4].letter}</span>
-              </li> */}
             </Fragment>
           ))}
         </ul>
