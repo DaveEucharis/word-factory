@@ -58,7 +58,7 @@ const PrepareStart = () => {
       <div className='center flex-col gap-4'>
         <div
           className={
-            'h-[25rem] w-[18rem] bg-amber-300 rounded-lg p-4 transition-outline ' +
+            'h-[25rem] w-[18rem] md:h-[30rem] md:w-[23rem] bg-amber-300 rounded-lg p-4 transition-outline ' +
             (ready ? 'outline-4 outline-green-500' : '')
           }
         >
@@ -68,7 +68,7 @@ const PrepareStart = () => {
             value={name}
             onBlur={handleUnselectName}
             onChange={ev => setName(ev.target.value)}
-            className='text-center text-2xl font-semibold w-full outline-none'
+            className='text-center text-2xl md:text-3xl font-semibold w-full outline-none'
             maxLength={10}
             minLength={3}
           />
@@ -87,10 +87,10 @@ const PrepareStart = () => {
                       : 'bg-red-500')
                   }
                 >
-                  <p className='text-xl font-semibold '>{v.name}</p>
+                  <p className='text-xl md:text-2xl font-semibold '>{v.name}</p>
                   <p
                     className={
-                      'text-xl font-semibold text-right  ' +
+                      'text-xl md:text-2xl font-semibold text-right  ' +
                       (v.playing
                         ? 'text-amber-400'
                         : v.ready
@@ -109,7 +109,7 @@ const PrepareStart = () => {
         <button
           onClick={handleReady}
           className={
-            'bg-amber-400 text-2xl py-2 px-10 rounded-2xl font-bold transition-colors ' +
+            'bg-amber-400 text-2xl md:text-3xl py-2 px-10 rounded-2xl font-bold transition-colors ' +
             (ready ? 'bg-green-500' : '')
           }
         >

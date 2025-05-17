@@ -48,11 +48,11 @@ const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
   })
 
   return (
-    <section className='h-full w-90 center overflow-y-scroll []'>
-      <ul className='flex flex-col w-full gap-4 bg-amber-300 rounded-xl px-4 pb-8'>
+    <section className='h-full w-90 md:w-100 flex justify-center overflow-hidden py-4'>
+      <ul className='flex flex-col w-full gap-4 bg-amber-300 rounded-xl px-4 pb-8 overflow-y-scroll'>
         <header className='flex justify-between items-center w-[90%] p-4 mx-auto rounded-md bg-amber-400'>
-          <span className='text-2xl font-bold'>Player</span>
-          <span className='text-2xl font-bold'>Score</span>
+          <span className='text-2xl md:text-3xl font-bold'>Player</span>
+          <span className='text-2xl md:text-3xl font-bold'>Score</span>
         </header>
 
         {tallyResult.map((v, i) => (
@@ -65,17 +65,19 @@ const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
                 scorePlacesStyle(i)
               }
             >
-              <span className='text-xl font-semibold'>{v.name}</span>
-              <span className='text-2xl font-bold'>{v.score}</span>
+              <span className='text-xl md:text-2xl font-semibold'>
+                {v.name}
+              </span>
+              <span className='text-2xl md:text-3xl font-bold'>{v.score}</span>
             </div>
 
             <div className='w-[90%] h-0 mt-2 mx-auto overflow-hidden rounded-md bg-amber-400 transition-height'>
-              <ul className='flex flex-wrap p-4 gap-4'>
+              <ul className='flex flex-wrap p-4 gap-4 max-h-[12rem] overflow-y-auto'>
                 {v.result.map((v2, i2) => (
                   <li
                     key={i2}
                     className={
-                      'lowercase font-semibold text-center ' +
+                      'lowercase font-semibold text-center md:text-xl ' +
                       (!v2.valid ? 'opacity-90 line-through' : '')
                     }
                   >
@@ -89,7 +91,7 @@ const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
 
         <button
           onClick={handleReturn}
-          className='bg-amber-500 text-2xl py-2 px-10 rounded-2xl font-bold mx-auto block mt-8'
+          className='bg-amber-500 text-2xl md:text-3xl py-2 px-10 rounded-2xl font-bold mx-auto block mt-8'
         >
           Return
         </button>

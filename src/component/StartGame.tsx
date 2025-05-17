@@ -140,7 +140,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
   }, [])
 
   const classes = {
-    li: 'text-2xl font-bold rounded-md text-center center bg-amber-300 underline transition-outline outline-0',
+    li: 'text-2xl md:text-3xl font-bold rounded-md text-center center bg-amber-300 underline transition-outline outline-0',
   }
 
   ;('rotate-0 rotate-90 rotate-180 rotate-270')
@@ -158,7 +158,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
             <ScoreTally foundWords={foundWords} />
           )}
         </div>
-        <ul className='size-80 mx-auto grid grid-cols-5 justify-center gap-2'>
+        <ul className='size-80 md:size-90 mx-auto grid grid-cols-5 justify-center gap-2'>
           {wordFactoryArray.map((v, i) => (
             <Fragment key={i}>
               {v.map((v2, i2) => (
@@ -174,25 +174,25 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
             </Fragment>
           ))}
         </ul>
-        <div className='relative center mt-2 h-14 border-b-2 border-amber-500 mx-auto w-90'>
-          <span className='absolute text-2xl -translate-x-35 text-blue-500 font-semibold'>
+        <div className='relative center mt-2 h-14 border-b-2 border-amber-500 mx-auto w-90 md:w-100 pb-2'>
+          <span className='absolute text-2xl md:text-3xl -translate-x-35 md:-translate-x-40 text-blue-500 font-semibold'>
             {timer}
           </span>
-          <h1 className='text-2xl font-semibold bg-amber-400 rounded-2xl px-3'>
+          <h1 className='text-2xl md:text-3xl font-semibold bg-amber-400 rounded-2xl px-3'>
             {word}
           </h1>
           <button
             onClick={handle.delete}
-            className='absolute text-4xl font-black  text-red-600 ml-4 translate-x-30'
+            className='absolute text-4xl md:text-5xl font-black  text-red-600 ml-4 translate-x-30 md:translate-x-35'
           >
             &#10229;
           </button>
         </div>
-        <ul className='flex flex-wrap w-80 mx-auto gap-4 mt-2'>
+        <ul className='flex flex-wrap w-80 mx-auto gap-4 mt-4'>
           {foundWords.map((v, i) => (
             <li
               key={i}
-              className='lowercase font-semibold'
+              className='lowercase font-semibold md:text-xl'
             >
               {v}
             </li>
