@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
+import { AnimatePresence, motion } from 'motion/react'
+
 import Home from './component/Home'
 import StartGame from './component/StartGame'
 import { listenToSocket } from './utils/socket'
@@ -30,9 +32,25 @@ const App = () => {
   fullScreenAPI()
 
   return (
-    <>
-      {playing ? <StartGame wordFactoryArray={wordFactoryArray} /> : <Home />}
-    </>
+    <AnimatePresence>
+      {playing ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <StartGame wordFactoryArray={wordFactoryArray} />
+        </motion.div>
+      ) : (
+        <motion.div
+          key={'home'}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Home />
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }
 

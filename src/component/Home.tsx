@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import { pickRandomNames } from '../utils/randomNames'
 
 import { listenToSocket, socket } from '../utils/socket'
@@ -26,6 +27,7 @@ const PrepareStart = () => {
   const [ready, setReady] = useState(false)
   const [name, setName] = useState(localStorageName)
   const [otherPlayers, setOtherPlayers] = useState<OtherPlayers>([])
+  const [timer, setTimer] = useState(0)
 
   const handleReady = () => {
     setReady(prev => !prev)
@@ -53,15 +55,28 @@ const PrepareStart = () => {
     setOtherPlayers(data)
   })
 
+  //Handle Timer Events
+  useEffect(() => {
+    let intervalID = 0
+
+    if (otherPlayers.every(v => v.ready === true) && otherPlayers.length > 1) {
+      setTimer(3)
+
+      intervalID = setInterval(() => {
+        setTimer(prev => prev - 1)
+      }, 1000)
+    }
+
+    return () => {
+      clearInterval(intervalID)
+      setTimer(-1)
+    }
+  }, [otherPlayers])
+
   return (
     <>
       <div className='center flex-col gap-4'>
-        <div
-          className={
-            'h-[25rem] w-[18rem] md:h-[30rem] md:w-[23rem] bg-amber-300 rounded-lg p-4 transition-outline ' +
-            (ready ? 'outline-4 outline-green-500' : '')
-          }
-        >
+        <div className='h-[25rem] w-[18rem] md:h-[30rem] md:w-[23rem] bg-amber-300 rounded-lg p-4'>
           <input
             type='text'
             placeholder='Player Name'
@@ -73,7 +88,7 @@ const PrepareStart = () => {
             minLength={3}
           />
 
-          <ul className='bg-amber-500 h-[85%] rounded-lg mt-4 p-3 overflow-y-auto inset-shadow-black inset-shadow-sm'>
+          <ul className='bg-amber-500 h-[80%] rounded-lg mt-4 p-3 overflow-y-auto inset-shadow-black inset-shadow-sm'>
             {otherPlayers.map((v, i) =>
               v.id !== socket.id ? (
                 <li
@@ -95,6 +110,12 @@ const PrepareStart = () => {
               ) : null
             )}
           </ul>
+
+          {timer > -1 ? (
+            <p className='font-semibold text-xl md:text-2xl text-center mt-1 text-red-500'>
+              starting in . . . <span className='font-bold'>{timer}</span>
+            </p>
+          ) : null}
         </div>
 
         <button

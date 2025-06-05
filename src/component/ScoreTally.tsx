@@ -1,4 +1,4 @@
-import { useState, type SyntheticEvent, useEffect } from 'react'
+import { useState, type SyntheticEvent } from 'react'
 import { listenToSocket, socket } from '../utils/socket'
 
 type TallyScore = {
@@ -8,11 +8,7 @@ type TallyScore = {
   id: string
 }[]
 
-type ScoreTallyProps = {
-  foundWords: string[]
-}
-
-const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
+const ScoreTally = () => {
   const [tallyResult, setTallyResult] = useState<TallyScore>([])
 
   //Listeners
@@ -37,10 +33,6 @@ const ScoreTally = ({ foundWords }: ScoreTallyProps) => {
   const handleReturn = () => {
     socket.emit('return')
   }
-
-  useEffect(() => {
-    socket.emit('found-words', foundWords)
-  }, [])
 
   //Listen to Result
   listenToSocket('tally-result', (data: TallyScore) => {

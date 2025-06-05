@@ -5,8 +5,11 @@ import {
   useEffect,
   useRef,
 } from 'react'
+import { motion } from 'motion/react'
+
 import ScoreTally from './ScoreTally'
 import { isProd } from '../utils/isProd'
+import { socket } from '../utils/socket'
 
 type StartGameProps = {
   wordFactoryArray: {
@@ -19,7 +22,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
   const [selectedBlocks, setSelectedBlocks] = useState<HTMLLIElement[]>([])
   const [word, setWord] = useState('')
   const [foundWords, setFoundWords] = useState<string[]>([])
-  const [timer, setTimer] = useState(3)
+  const [timer, setTimer] = useState(isProd ? 120 : 5)
 
   const curtainRef = useRef<HTMLDivElement>(null)
 
@@ -100,42 +103,32 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
   }, [selectedBlocks])
 
   //COUNTDOWN TO START
-  const initialCountdown = useRef(true)
-  const hasRun = useRef(false)
-  useEffect(() => {
-    if (!hasRun.current && !isProd) {
-      hasRun.current = true
-      return
-    }
 
+  useEffect(() => {
     const intervalID = setInterval(() => {
       setTimer(time => {
         if (time < 1) {
-          if (initialCountdown.current) {
-            curtainRef.current?.classList.add('-translate-y-[100%]')
-            setTimeout(() => {
-              curtainRef.current?.classList.add('hidden')
+          //Emit the Found Words
+          socket.emit('found-words', foundWords)
 
-              initialCountdown.current = false
-            }, 1000)
+          clearInterval(intervalID)
 
-            return isProd ? 120 : 9999 // 2mins
-          } else {
-            clearInterval(intervalID)
+          curtainRef.current?.classList.remove('hidden')
+          setTimeout(() => {
+            curtainRef.current?.classList.remove('-translate-y-[100%]')
+          }, 0)
 
-            curtainRef.current?.classList.remove('hidden')
-            setTimeout(() => {
-              curtainRef.current?.classList.remove('-translate-y-[100%]')
-            }, 0)
-
-            return -1
-          }
+          return -1
         }
 
         return time - 1
       })
     }, 1000)
-  }, [])
+
+    return () => {
+      clearInterval(intervalID)
+    }
+  }, [foundWords])
 
   const classes = {
     li: 'relative text-3xl md:text-4xl font-bold rounded-md text-center center bg-amber-300 transition-outline outline-0',
@@ -145,17 +138,14 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
 
   return (
     <>
-      <section className='realtive select-none pt-4'>
+      <motion.section className='realtive select-none pt-4'>
         <div
           ref={curtainRef}
-          className='absolute h-full bg-amber-200 rounded-lg left-0 right-0 top-0 z-10 center transition-translate'
+          className='absolute h-full bg-amber-200 rounded-lg left-0 right-0 top-0 z-10 center transition-translate -translate-y-[100%] hidden'
         >
-          {timer > -1 ? (
-            <span className='text-8xl font-bold'>{timer}</span>
-          ) : (
-            <ScoreTally foundWords={foundWords} />
-          )}
+          <ScoreTally />
         </div>
+
         <ul className='size-80 md:size-90 mx-auto grid grid-cols-5 justify-center gap-2'>
           {wordFactoryArray.map((v, i) => (
             <Fragment key={i}>
@@ -193,7 +183,9 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
             &#10229;
           </button>
         </div>
-        <ul className='flex flex-wrap w-80 mx-auto gap-4 mt-4'>
+
+        {/* Found Words */}
+        <ul className='flex flex-wrap w-80 mx-auto gap-4 mt-4 overflow-y-auto'>
           {foundWords.map((v, i) => (
             <li
               key={i}
@@ -203,7 +195,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
             </li>
           ))}
         </ul>
-      </section>
+      </motion.section>
     </>
   )
 }
