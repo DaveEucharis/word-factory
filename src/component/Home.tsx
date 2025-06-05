@@ -68,12 +68,12 @@ const PrepareStart = () => {
             value={name}
             onBlur={handleUnselectName}
             onChange={ev => setName(ev.target.value)}
-            className='text-center text-2xl md:text-3xl font-semibold w-full outline-none'
+            className='text-center text-2xl md:text-3xl font-bold w-full outline-none'
             maxLength={10}
             minLength={3}
           />
 
-          <ul className='bg-amber-500 h-[85%] rounded-lg mt-4 p-3'>
+          <ul className='bg-amber-500 h-[85%] rounded-lg mt-4 p-3 overflow-y-auto inset-shadow-black inset-shadow-sm'>
             {otherPlayers.map((v, i) =>
               v.id !== socket.id ? (
                 <li
@@ -88,16 +88,7 @@ const PrepareStart = () => {
                   }
                 >
                   <p className='text-xl md:text-2xl font-semibold '>{v.name}</p>
-                  <p
-                    className={
-                      'text-xl md:text-2xl font-semibold text-right  ' +
-                      (v.playing
-                        ? 'text-amber-400'
-                        : v.ready
-                        ? 'text-green-600'
-                        : 'text-red-600')
-                    }
-                  >
+                  <p className='text-xl md:text-2xl font-semibold text-right opacity-50 '>
                     {v.playing ? 'Playing' : v.ready ? 'Ready' : 'Unready'}
                   </p>
                 </li>

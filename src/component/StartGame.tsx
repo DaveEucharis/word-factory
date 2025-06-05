@@ -21,8 +21,6 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
   const [foundWords, setFoundWords] = useState<string[]>([])
   const [timer, setTimer] = useState(3)
 
-  // const [wordFactoryArray, setWordFactoryArray] = useState<WordFactoryArray>([])
-
   const curtainRef = useRef<HTMLDivElement>(null)
 
   //EVENT LISTENERS
@@ -31,9 +29,9 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
       const selectedLi = ev.currentTarget as HTMLLIElement
 
       //Nothing Selected Yet
-      if (!selectedBlocks.length) {
+      if (!selectedBlocks.length && selectedLi.dataset.letter) {
         setSelectedBlocks([selectedLi])
-        setWord(selectedLi.children[0].innerHTML)
+        setWord(selectedLi.dataset.letter)
         return
       }
 
@@ -75,7 +73,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
         (LInd[0] === sInd[0] && LInd[1] - 1 === sInd[1])
       ) {
         setSelectedBlocks(prev => [...prev, selectedLi])
-        setWord(prev => prev + selectedLi.children[0].innerHTML)
+        setWord(prev => prev + selectedLi.dataset.letter)
       }
     },
 
@@ -121,7 +119,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
               initialCountdown.current = false
             }, 1000)
 
-            return isProd ? 120 : 5 // 2mins
+            return isProd ? 120 : 9999 // 2mins
           } else {
             clearInterval(intervalID)
 
@@ -140,7 +138,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
   }, [])
 
   const classes = {
-    li: 'text-2xl md:text-3xl font-bold rounded-md text-center center bg-amber-300 underline transition-outline outline-0',
+    li: 'relative text-3xl md:text-4xl font-bold rounded-md text-center center bg-amber-300 transition-outline outline-0',
   }
 
   ;('rotate-0 rotate-90 rotate-180 rotate-270')
@@ -164,11 +162,18 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
               {v.map((v2, i2) => (
                 <li
                   key={i2}
+                  data-letter={v2.letter}
                   data-index={String(i) + i2}
                   onClick={handle.diceClick}
                   className={classes.li}
                 >
-                  <span className={`rotate-${v2.rotation}`}>{v2.letter}</span>
+                  <span className={`rotate-${v2.rotation}`}>
+                    {v2.letter}
+
+                    {v2.letter === 'M' || v2.letter === 'W' ? (
+                      <div className='absolute h-0.5 w-4 bg-black bottom-0 left-0 right-0 mx-auto'></div>
+                    ) : null}
+                  </span>
                 </li>
               ))}
             </Fragment>
