@@ -27,7 +27,7 @@ const PrepareStart = () => {
   const [ready, setReady] = useState(false)
   const [name, setName] = useState(localStorageName)
   const [otherPlayers, setOtherPlayers] = useState<OtherPlayers>([])
-  const [timer, setTimer] = useState(0)
+  const [timer, setTimer] = useState(-1)
 
   const handleReady = () => {
     setReady(prev => !prev)

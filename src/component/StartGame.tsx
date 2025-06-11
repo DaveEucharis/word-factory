@@ -11,6 +11,10 @@ import ScoreTally from './ScoreTally'
 import { isProd } from '../utils/isProd'
 import { socket } from '../utils/socket'
 
+import fullscreenIcon from '../assets/fullscreen.svg'
+
+import { fullScreenAPI } from '../utils/fullScreen'
+
 type StartGameProps = {
   wordFactoryArray: {
     letter: string
@@ -22,7 +26,7 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
   const [selectedBlocks, setSelectedBlocks] = useState<HTMLLIElement[]>([])
   const [word, setWord] = useState('')
   const [foundWords, setFoundWords] = useState<string[]>([])
-  const [timer, setTimer] = useState(isProd ? 120 : 5)
+  const [timer, setTimer] = useState(isProd ? 120 : 20)
 
   const curtainRef = useRef<HTMLDivElement>(null)
 
@@ -181,6 +185,15 @@ const StartGame = ({ wordFactoryArray }: StartGameProps) => {
             className='absolute text-4xl md:text-5xl font-black  text-red-600 ml-4 translate-x-30 md:translate-x-35'
           >
             &#10229;
+          </button>
+          <button
+            onClick={fullScreenAPI}
+            className='absolute w-10 -bottom-6 left-4'
+          >
+            <img
+              src={fullscreenIcon}
+              alt=''
+            />
           </button>
         </div>
 

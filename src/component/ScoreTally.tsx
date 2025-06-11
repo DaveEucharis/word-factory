@@ -3,7 +3,7 @@ import { listenToSocket, socket } from '../utils/socket'
 
 type TallyScore = {
   name: string
-  result: { word: string; valid: boolean }[]
+  result: { word: string; valid: boolean; unique: boolean }[]
   score: number
   id: string
 }[]
@@ -70,7 +70,11 @@ const ScoreTally = () => {
                     key={i2}
                     className={
                       'lowercase font-semibold text-center md:text-xl ' +
-                      (!v2.valid ? 'opacity-90 line-through' : '')
+                      (!v2.valid
+                        ? 'opacity-70 line-through'
+                        : v2.unique
+                        ? 'text-green-800'
+                        : 'text-red-600 line-through')
                     }
                   >
                     {v2.word}

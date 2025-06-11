@@ -29,8 +29,6 @@ const App = () => {
     setPlaying(false)
   })
 
-  fullScreenAPI()
-
   return (
     <AnimatePresence>
       {playing ? (
