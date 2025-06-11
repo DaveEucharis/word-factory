@@ -6,7 +6,6 @@ import { AnimatePresence, motion } from 'motion/react'
 import Home from './component/Home'
 import StartGame from './component/StartGame'
 import { listenToSocket } from './utils/socket'
-import { fullScreenAPI } from './utils/fullScreen'
 
 type WordFactoryArray = {
   letter: string
